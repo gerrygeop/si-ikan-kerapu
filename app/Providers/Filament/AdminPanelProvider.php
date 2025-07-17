@@ -2,6 +2,11 @@
 
 namespace App\Providers\Filament;
 
+use App\Filament\Widgets\FishTypeValueBreakdownChart;
+use App\Filament\Widgets\ManagerDashboardStats;
+use App\Filament\Widgets\MonthlyQuantityTrendChart;
+use App\Filament\Widgets\TopSuppliersChart;
+use App\Filament\Widgets\YearlyQuantityTrendChart;
 use Filament\Http\Middleware\Authenticate;
 use Filament\Http\Middleware\DisableBladeIconComponents;
 use Filament\Http\Middleware\DispatchServingFilamentEvent;
@@ -38,8 +43,11 @@ class AdminPanelProvider extends PanelProvider
             ])
             ->discoverWidgets(in: app_path('Filament/Widgets'), for: 'App\\Filament\\Widgets')
             ->widgets([
-                Widgets\AccountWidget::class,
-                Widgets\FilamentInfoWidget::class,
+                ManagerDashboardStats::class,
+                YearlyQuantityTrendChart::class,
+                MonthlyQuantityTrendChart::class,
+                FishTypeValueBreakdownChart::class,
+                TopSuppliersChart::class,
             ])
             ->middleware([
                 EncryptCookies::class,
