@@ -3,12 +3,9 @@
 namespace App\Filament\Resources;
 
 use App\Filament\Resources\UserResource\Pages;
-use App\Filament\Resources\UserResource\RelationManagers;
 use App\Models\User;
 use Filament\Forms;
 use Filament\Forms\Form;
-use Filament\Pages\Page;
-use Filament\Resources\Pages\CreateRecord;
 use Filament\Resources\Resource;
 use Filament\Tables;
 use Filament\Tables\Table;
@@ -29,11 +26,7 @@ class UserResource extends Resource
             ->schema([
                 Forms\Components\TextInput::make('name')
                     ->required()
-                    ->maxLength(255)
-                    ->columnSpanFull(),
-
-                Forms\Components\Select::make('role_id')
-                    ->relationship('roles', 'name'),
+                    ->maxLength(255),
 
                 Forms\Components\TextInput::make('email')
                     ->email()
@@ -42,18 +35,16 @@ class UserResource extends Resource
 
                 Forms\Components\TextInput::make('password')
                     ->password()
-                    ->required(fn (Page $livewire): bool => $livewire instanceof CreateRecord)
-                    ->minLength(8)
-                    ->same('passwordConfirmation')
-                    ->dehydrated(fn ($state) => filled($state))
-                    ->dehydrateStateUsing(fn ($state) => Hash::make($state)),
+                    ->required()
+                    ->revealable()
+                    ->dehydrateStateUsing(fn(string $state): string => Hash::make($state))
+                    ->dehydrated(fn(?string $state): bool => filled($state))
+                    ->required(fn(string $operation): bool => $operation === 'create')
+                    ->maxLength(255),
 
-                Forms\Components\TextInput::make('passwordConfirmation')
-                    ->label('Password Confirmation')
-                    ->password()
-                    ->required(fn (Page $livewire): bool => $livewire instanceof CreateRecord)
-                    ->minLength(8)
-                    ->dehydrated(false),
+                Forms\Components\Select::make('role_id')
+                    ->relationship('role', 'name')
+                    ->required(),
             ]);
     }
 
@@ -66,10 +57,9 @@ class UserResource extends Resource
                     ->sortable(),
                 Tables\Columns\TextColumn::make('email')
                     ->searchable(),
-                Tables\Columns\TextColumn::make('email_verified_at')
-                    ->dateTime()
-                    ->sortable()
-                    ->toggleable(isToggledHiddenByDefault: true),
+                Tables\Columns\TextColumn::make('role.name')
+                    ->searchable(),
+
                 Tables\Columns\TextColumn::make('created_at')
                     ->dateTime()
                     ->sortable()
@@ -78,17 +68,25 @@ class UserResource extends Resource
                     ->dateTime()
                     ->sortable()
                     ->toggleable(isToggledHiddenByDefault: true),
+                Tables\Columns\TextColumn::make('deleted_at')
+                    ->dateTime()
+                    ->sortable()
+                    ->toggleable(isToggledHiddenByDefault: true),
             ])
             ->filters([
-                //
+                Tables\Filters\TrashedFilter::make(),
             ])
             ->actions([
                 Tables\Actions\EditAction::make(),
                 Tables\Actions\DeleteAction::make(),
+                Tables\Actions\ForceDeleteAction::make(),
+                Tables\Actions\RestoreAction::make(),
             ])
             ->bulkActions([
                 Tables\Actions\BulkActionGroup::make([
                     Tables\Actions\DeleteBulkAction::make(),
+                    Tables\Actions\ForceDeleteBulkAction::make(),
+                    Tables\Actions\RestoreBulkAction::make(),
                 ]),
             ]);
     }
@@ -98,5 +96,13 @@ class UserResource extends Resource
         return [
             'index' => Pages\ManageUsers::route('/'),
         ];
+    }
+
+    public static function getEloquentQuery(): Builder
+    {
+        return parent::getEloquentQuery()
+            ->withoutGlobalScopes([
+                SoftDeletingScope::class,
+            ]);
     }
 }

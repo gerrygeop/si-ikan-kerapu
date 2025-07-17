@@ -27,6 +27,9 @@ class RoleResource extends Resource
                 Forms\Components\TextInput::make('name')
                     ->required()
                     ->maxLength(100),
+
+                Forms\Components\TextInput::make('description')
+                    ->maxLength(255),
             ]);
     }
 
@@ -36,6 +39,7 @@ class RoleResource extends Resource
             ->columns([
                 Tables\Columns\TextColumn::make('name')
                     ->searchable(),
+
                 Tables\Columns\TextColumn::make('created_at')
                     ->dateTime()
                     ->sortable()
