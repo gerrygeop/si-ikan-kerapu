@@ -142,14 +142,17 @@ class TransactionResource extends Resource
                 Tables\Columns\TextColumn::make('entry_datetime')
                     ->label('Waktu masuk')
                     ->dateTime('d M Y')
+                    ->searchable()
                     ->sortable(),
 
                 Tables\Columns\TextColumn::make('supplier.name')
                     ->label('Nama Pedagang')
+                    ->searchable()
                     ->sortable(),
 
                 Tables\Columns\TextColumn::make('fish.name')
                     ->label('Jenis Ikan')
+                    ->searchable()
                     ->sortable(),
 
                 Tables\Columns\TextColumn::make('origin')
@@ -195,7 +198,14 @@ class TransactionResource extends Resource
                 Tables\Actions\BulkActionGroup::make([
                     Tables\Actions\DeleteBulkAction::make(),
                 ]),
-            ]);
+            ])
+            ->selectable(function (Builder $query) {
+                if (auth()->user()->hasRole('operator')) {
+                    return true;
+                }
+                return false;
+                // return $query->where('user_id', auth()->id());
+            });
     }
 
     public static function getRelations(): array
