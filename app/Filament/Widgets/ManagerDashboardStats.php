@@ -13,7 +13,7 @@ class ManagerDashboardStats extends BaseWidget
 
     public static function canView(): bool
     {
-        return auth()->user() && auth()->user()->hasRole(['manajer', 'operator']);
+        return auth()->user() && auth()->user()->hasRole(['manajer', 'operator', 'admin']);
     }
 
     protected function getStats(): array
