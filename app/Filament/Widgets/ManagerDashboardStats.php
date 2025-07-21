@@ -11,10 +11,10 @@ class ManagerDashboardStats extends BaseWidget
 {
     protected static ?int $sort = 1;
 
-    public static function canView(): bool
-    {
-        return auth()->user() && auth()->user()->hasRole(['manajer', 'operator', 'admin']);
-    }
+    // public static function canView(): bool
+    // {
+    //     return auth()->user() && auth()->user()->hasRole(['manajer', 'operator', 'admin']);
+    // }
 
     protected function getStats(): array
     {
@@ -45,17 +45,18 @@ class ManagerDashboardStats extends BaseWidget
                 ->color('primary'),
 
             Stat::make('Nilai Pemasukan Bulan Ini', 'Rp ' . number_format($totalValueMonth, 0, ',', '.'))
-                ->description('Estimasi nilai jual bulan ini')
+                ->description('Total nilai penjualan bulan ini')
                 ->descriptionIcon('heroicon-m-currency-dollar')
                 ->color('info'),
 
-            Stat::make('Rata-rata Harga Jual (Kg)', 'Rp ' . number_format($avgPricePerKg, 0, ',', '.'))
-                ->description('Rata-rata harga keseluruhan')
-                ->descriptionIcon('heroicon-m-chart-bar')
-                ->color('warning'),
+            // Stat::make('Rata-rata Harga Jual (Kg)', 'Rp ' . number_format($avgPricePerKg, 0, ',', '.'))
+            //     ->description('Rata-rata harga keseluruhan')
+            //     ->descriptionIcon('heroicon-m-chart-bar')
+            //     ->color('warning'),
 
             Stat::make('Nilai Pemasukan Tahun Ini', 'Rp ' . number_format($totalValueYear, 0, ',', '.'))
                 ->description('Total nilai penjualan tahun ini')
+                ->descriptionIcon('heroicon-m-currency-dollar')
                 ->color('secondary'),
         ];
     }
