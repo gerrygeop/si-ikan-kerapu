@@ -6,6 +6,7 @@ use App\Filament\Guest\Pages\Dashboard;
 use Filament\Http\Middleware\Authenticate;
 use Filament\Http\Middleware\DisableBladeIconComponents;
 use Filament\Http\Middleware\DispatchServingFilamentEvent;
+use Filament\Navigation\NavigationItem;
 use Filament\Pages;
 use Filament\Panel;
 use Filament\PanelProvider;
@@ -50,7 +51,13 @@ class GuestPanelProvider extends PanelProvider
                 SubstituteBindings::class,
                 DisableBladeIconComponents::class,
                 DispatchServingFilamentEvent::class,
-            ]);
+            ])
+            ->navigationItems([
+                NavigationItem::make('Login')
+                    ->url(env('APP_URL') . '/d')
+                    ->icon('heroicon-o-arrow-right-end-on-rectangle')
+            ])
+            ->topbar(false);
         // ->authMiddleware([
         //     Authenticate::class,
         // ]);
