@@ -37,9 +37,7 @@ class YearlyQuantityTrendChart extends ChartWidget
                 [
                     'label' => 'Total Kuantitas (Kg)',
                     'data' => $chartData,
-                    'backgroundColor' => '#36A2EB',
-                    'borderColor' => '#36A2EB',
-                    'fill' => false, // Garis saja
+                    'fill' => 'start', // Garis saja
                 ],
             ],
             'labels' => $years,

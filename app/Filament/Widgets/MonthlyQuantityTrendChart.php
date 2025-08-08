@@ -46,9 +46,7 @@ class MonthlyQuantityTrendChart extends ChartWidget
                 [
                     'label' => 'Total Kuantitas (Kg)',
                     'data' => $quantities,
-                    'backgroundColor' => '#36A2EB',
-                    'borderColor' => '#36A2EB',
-                    'fill' => false, // Untuk line chart tanpa area di bawahnya
+                    'fill' => 'start', // Untuk line chart tanpa area di bawahnya
                 ],
             ],
             'labels' => $labels,

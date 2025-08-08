@@ -45,9 +45,8 @@ class MonthlyFishPriceTrendChart extends ChartWidget
                 [
                     'label' => 'Harga Rata-rata (Rp/Kg)',
                     'data' => $prices,
-                    'backgroundColor' => '#FF6384', // Warna untuk tren harga
                     'borderColor' => '#FF6384',
-                    'fill' => false, // Untuk line chart tanpa area di bawahnya
+                    'fill' => 'start', // Untuk line chart tanpa area di bawahnya
                 ],
             ],
             'labels' => $labels,
@@ -72,14 +71,6 @@ class MonthlyFishPriceTrendChart extends ChartWidget
                     ],
                 ],
             ],
-            'plugins' => [
-                'tooltip' => [
-                    'callbacks' => [
-                        // Memformat nilai tooltip agar ada "Rp " dan format mata uang Indonesia
-                        'label' => 'function(context) { return context.dataset.label + ": Rp " + context.parsed.y.toLocaleString("id-ID"); }'
-                    ]
-                ]
-            ]
         ];
     }
 
