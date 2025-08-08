@@ -2,6 +2,7 @@
 
 namespace App\Filament\Resources;
 
+use App\Filament\Exports\TransactionExporter;
 use App\Filament\Resources\TransactionResource\Pages;
 use App\Filament\Resources\TransactionResource\RelationManagers;
 use App\Models\Transaction;
@@ -227,6 +228,10 @@ class TransactionResource extends Resource
                         return $indicators;
                     }),
             ])
+            ->headerActions([
+                Tables\Actions\ExportAction::make()
+                    ->exporter(TransactionExporter::class)
+            ])
             ->actions([
                 Tables\Actions\ViewAction::make(),
                 Tables\Actions\EditAction::make(),
@@ -237,7 +242,7 @@ class TransactionResource extends Resource
                 ]),
             ])
             ->selectable(function (Builder $query) {
-                if (auth()->user()->hasRole('operator')) {
+                if (auth()->user()->hasRole(['operator', 'admin'])) {
                     return true;
                 }
                 return false;
